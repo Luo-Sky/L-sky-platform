@@ -9,6 +9,10 @@ spring:
     password: shixindonga123
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
 
 mybatis:
   type-aliases-package: com.example.demo.entity
@@ -23,6 +27,9 @@ mybatis:
 #        demo:
 #          mapper : debug
 
+myconf:
+
+  ip: http://localhost
 
 mybatis-plus:
   #  global-config:

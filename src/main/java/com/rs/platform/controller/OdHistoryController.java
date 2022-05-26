@@ -34,7 +34,9 @@ public class OdHistoryController {
 
     @Value("${server.port}")
     private String port;
-    private static final String ip = "http://localhost";
+
+    @Value("${myconf.ip}")
+    private  String ip;
 
     /**
      * 创建目标提取任务，保存操作
