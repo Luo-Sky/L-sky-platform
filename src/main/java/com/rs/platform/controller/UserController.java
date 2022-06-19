@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.rs.platform.common.MailUtils;
 import com.rs.platform.common.Result;
 import com.rs.platform.entity.User;
 import com.rs.platform.service.IUserService;
@@ -25,7 +26,10 @@ public class UserController {
         User res = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getUserName, user.getUserName()).eq(User::getPassword, user.getPassword()));
         //User res = userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUserName, user.getUserName()).eq(User::getPassword, user.getPassword()));
         if(res == null){
-            return Result.error("-1","用户名或密码错误");
+            res = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getMail, user.getUserName()).eq(User::getPassword, user.getPassword()));
+            if(res == null) {
+                return Result.error("-1", "用户名或密码错误");
+            }
         }
         return Result.success(res);
     }
@@ -43,6 +47,16 @@ public class UserController {
         userService.save(user);
         return Result.success();
     }
+
+//    @PostMapping("/mail")
+//    public Result<?> sendMail(@RequestParam String mail) throws Exception {
+//        //使用随机数生成简易的验证码
+//        double ma=Math.random()*100;
+//        int ma1=(int) ma;
+//        String yzm=""+ma1;
+//        MailUtils.sendMail(mail,ma1); //收件人邮箱和验证码
+//        return Result.success();
+//    }
 
 
 //    @PostMapping

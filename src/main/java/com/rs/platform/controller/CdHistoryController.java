@@ -46,8 +46,8 @@ public class CdHistoryController {
         // 定义文件的唯一标识（前缀）
         String flag1 = IdUtil.fastSimpleUUID();
         String flag2 = IdUtil.fastSimpleUUID();
-        String rootFilePath1 = System.getProperty("user.dir") + "/src/main/resources/files/" + flag1 + "_" + originalFilename1;  // 获取上传的路径
-        String rootFilePath2 = System.getProperty("user.dir") + "/src/main/resources/files/" + flag2 + "_" + originalFilename2;  // 获取上传的路径
+        String rootFilePath1 = System.getProperty("user.dir") + "/src/main/resources/files/" + flag1;  // 获取上传的路径
+        String rootFilePath2 = System.getProperty("user.dir") + "/src/main/resources/files/" + flag2;  // 获取上传的路径
 
         FileUtil.writeBytes(file1.getBytes(), rootFilePath1);  // 把文件写入到上传的路径
         FileUtil.writeBytes(file1.getBytes(), rootFilePath2);  // 把文件写入到上传的路径

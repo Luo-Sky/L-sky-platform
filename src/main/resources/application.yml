@@ -7,12 +7,30 @@ spring:
     url: jdbc:mysql://localhost:3306/platform?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=Asia/Shanghai
     username: root
     password: shixindonga123
+    type: com.alibaba.druid.pool.DruidDataSource
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
   servlet:
     multipart:
       max-file-size: 20MB
       max-request-size: 20MB
+  mail:
+    host: smtp.qq.com
+    port: 465
+    email:
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+  redis:
+    #数据库索引
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
 
 mybatis:
   type-aliases-package: com.example.demo.entity
@@ -27,9 +45,15 @@ mybatis:
 #        demo:
 #          mapper : debug
 
-myconf:
+#邮箱验证码有效时间/秒
+code:
+  expiration: 600
 
+myconf:
   ip: http://localhost
+
+model:
+  port: 8000
 
 mybatis-plus:
   #  global-config:
