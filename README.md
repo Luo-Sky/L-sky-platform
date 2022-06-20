@@ -59,7 +59,7 @@
 
         - 修改`resource`目录下的`application.yml`中的`mail`配置中的相关信息。这里使用了qq邮箱的pop3/smtp服务，可以去开启将得到的密码输入下面配置(注意不是qq邮箱密码)
 
-            ![image-20220620172440990](README.assets\image-20220620172440990.png)
+            ![image-20220620172440990](./README.assets/image-20220620172440990.png)
 
             ```yml
              mail:
