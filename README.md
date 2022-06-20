@@ -8,7 +8,7 @@
 
 ### 技术栈
 
-- 数据库：mysql
+- 数据库：mysql，redis（用于邮箱认证）
 - 持久化层：mybatis，mybatis-plus
 - mvc框架：springmvc
 - 应用层容器：springboot
@@ -44,7 +44,7 @@
 
 - 修改项目配置文件
 
-    - 修改resource目录下的`application.yml`中的`datasource`配置中的`url`,`username`,`password`:
+    - 修改`resource`目录下的`application.yml`中的`datasource`配置中的`url`,`username`,`password`:
 
         ```yml
         spring:
@@ -55,7 +55,40 @@
             password: your password
         ```
 
-    - ……
+    - 配置邮箱认证的功能。
+
+        - 修改`resource`目录下的`application.yml`中的`mail`配置中的相关信息。这里使用了qq邮箱的pop3/smtp服务，可以去开启将得到的密码输入下面配置(注意不是qq邮箱密码)
+
+            ![image-20220620172440990](README.assets\image-20220620172440990.png)
+
+            ```yml
+             mail:
+                host: smtp.qq.com
+                port: 465
+                email: xxxxxx@qq.com
+                username: xxxxxx@qq.com
+                password: 密码
+                properties:
+                  mail:
+                    smtp:
+                      ssl:
+                        enable: true
+            ```
+
+            
+
+        - 修改`resource`目录下的`application.yml`中的`redis`配置中的相关信息，该项目只配置了redis的服务在java服务本地
+
+            ```yml
+              redis:
+                #数据库索引
+                database: 0
+                host: 127.0.0.1
+                port: 6379(默认端口)
+                password: yourpassword(默认没设置没有)
+            ```
+
+    - …..
 
 - 运行主函数
 
@@ -64,3 +97,5 @@
 ## 开发日志
 
 2022/5/7 完成用户查询记录基本的一些功能
+
+2022/6/20 完成邮箱认证以及对接基本的模型推理功能

@@ -18,9 +18,9 @@ spring:
   mail:
     host: smtp.qq.com
     port: 465
-    email:
-    username:
-    password:
+    email: 1746882966@qq.com
+    username: 1746882966@qq.com
+    password: hyamygouomysfhbf
     properties:
       mail:
         smtp:
@@ -51,9 +51,9 @@ code:
   expiration: 600
 
 myconf:
-
+#  ip: http://49.235.224.43
   ip: http://localhost
-
+#  ip: http://192.168.43.98
 
 model:
   port: 8000
