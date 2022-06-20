@@ -9,6 +9,7 @@ spring:
     password: shixindonga123
     type: com.alibaba.druid.pool.DruidDataSource
   jackson:
+    time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
   servlet:
     multipart:
@@ -50,7 +51,9 @@ code:
   expiration: 600
 
 myconf:
+
   ip: http://localhost
+
 
 model:
   port: 8000
@@ -63,4 +66,3 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:com/example/demo/mapper/*Mapper.xml
   type-aliases-package: com.example.demo.entity
-

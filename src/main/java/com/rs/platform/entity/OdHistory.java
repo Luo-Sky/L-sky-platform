@@ -18,6 +18,7 @@ public class OdHistory {
     @TableId(value ="id", type = IdType.AUTO)
     private Long id;
     private Long projectId;
+    private String title;
     private Date startTime;
     private Date endTime;
     private String sourceImg;
