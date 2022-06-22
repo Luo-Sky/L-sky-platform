@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rs.platform.common.Result;
+import com.rs.platform.entity.HistoryConfig;
 import com.rs.platform.entity.OcHistory;
 import com.rs.platform.entity.OdHistory;
 import com.rs.platform.service.IOcHistoryService;
@@ -80,8 +81,8 @@ public class OcHistoryController {
         }
     }
 
-    @PostMapping("/process")
-    public Result<?> process(@RequestParam Long historyId, @RequestParam String flag) throws IOException {
+    @PostMapping("/process/5")
+    public Result<?> process5classes(@RequestParam Long historyId, @RequestParam String flag, @RequestBody HistoryConfig historyConfig) throws IOException {
         String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
         String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件
@@ -89,53 +90,33 @@ public class OcHistoryController {
         //请求路径
         String url = ip + ":" + modelPort;
 
-        // json对象
-        JSONObject jsonObject = new JSONObject();
-
-        // LinkedMultiValueMap 有点像JSON，用于传递post数据，网络上其他教程都使用
-        // MultiValueMpat<>来传递post数据
-        // 但传递的数据类型有限，不能像这个这么灵活，可以传递多种不同数据类型的参数
-        LinkedMultiValueMap<String, String> body = new LinkedMultiValueMap();
-        body.add("type", "segmentation");
-        body.add("img", fileName);
-
-//        设置请求header 为 APPLICATION_JSON
-        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-
-        // 请求体，包括请求数据 body 和 请求头 headers
-        HttpEntity httpEntity = new HttpEntity(body, headers);
-
-
-        try {
-            //使用 exchange 发送请求，以String的类型接收返回的数据
-            //ps，我请求的数据，其返回是一个json
-            ResponseEntity<String> strbody = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
-            //解析返回的数据
-            JSONObject jsTemp = JSONObject.parseObject(strbody.getBody());
-            System.out.println(jsTemp);
-
-            String resultImg = (String) jsTemp.get("label");
-
-            OcHistory ocHistory = new OcHistory();
-            ocHistory.setId(historyId);
-            ocHistory.setEndTime(new Date());
-            ocHistory.setResultImg(resultImg);
-            ocHistory.setResult(jsTemp.toJSONString());
-            if(ocHistoryService.updateById(ocHistory)){
-                return Result.success(jsTemp);
-            }
-            else{
-                return Result.error("-1", "保存结果失败");
-            }
-
-        } catch (Exception e) {
-            System.out.println(e);
+        String type = "segmentation_5classes";
+        JSONObject result = ocHistoryService.process(historyId, url, fileName, type, historyConfig);
+        if (result != null) {
+            return Result.success(result);
+        } else {
+            return Result.error("-1", "地物分类失败");
         }
-        return Result.error("-1", "地物分类失败");
     }
+
+    @PostMapping("/process/15")
+    public Result<?> process15classes(@RequestParam Long historyId, @RequestParam String flag, @RequestBody HistoryConfig historyConfig) throws IOException {
+        String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
+        List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
+        String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件
+
+        //请求路径
+        String url = ip + ":" + modelPort;
+
+        String type = "segmentation_15classes";
+        JSONObject result = ocHistoryService.process(historyId, url, fileName, type, historyConfig);
+        if (result != null) {
+            return Result.success(result);
+        } else {
+            return Result.error("-1", "地物分类失败");
+        }
+    }
+
 
     //删除一条地物分类任务记录
     @DeleteMapping("/{id}")

@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rs.platform.common.Result;
 import com.rs.platform.entity.CdHistory;
+import com.rs.platform.entity.HistoryConfig;
 import com.rs.platform.entity.OdHistory;
 import com.rs.platform.service.ICdHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +93,7 @@ public class CdHistoryController {
     }
 
     @PostMapping("/process")
-    public Result<?> process(@RequestParam Long historyId, @RequestParam String flag1, @RequestParam String flag2) throws IOException {
+    public Result<?> process(@RequestParam Long historyId, @RequestParam String flag1, @RequestParam String flag2, @RequestBody HistoryConfig historyConfig) throws IOException {
         String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
         String fileName1 = basePath + fileNames.stream().filter(name -> name.contains(flag1)).findAny().orElse("");  // 找到跟参数一致的文件
@@ -101,53 +102,13 @@ public class CdHistoryController {
         //请求路径
         String url = ip + ":" + modelPort;
 
-        // json对象
-        JSONObject jsonObject = new JSONObject();
-
-        // LinkedMultiValueMap 有点像JSON，用于传递post数据，网络上其他教程都使用
-        // MultiValueMpat<>来传递post数据
-        // 但传递的数据类型有限，不能像这个这么灵活，可以传递多种不同数据类型的参数
-        LinkedMultiValueMap<String, String> body = new LinkedMultiValueMap();
-        body.add("type", "change_detection");
-        body.add("img", fileName1);
-        body.add("img2", fileName2);
-
-//        设置请求header 为 APPLICATION_JSON
-        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-
-        // 请求体，包括请求数据 body 和 请求头 headers
-        HttpEntity httpEntity = new HttpEntity(body, headers);
-
-
-        try {
-            //使用 exchange 发送请求，以String的类型接收返回的数据
-            //ps，我请求的数据，其返回是一个json
-            ResponseEntity<String> strbody = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
-            //解析返回的数据
-            JSONObject jsTemp = JSONObject.parseObject(strbody.getBody());
-            System.out.println(jsTemp);
-
-            String resultImg = (String) jsTemp.get("label");
-
-            CdHistory cdHistory = new CdHistory();
-            cdHistory.setId(historyId);
-            cdHistory.setEndTime(new Date());
-            cdHistory.setResultImg(resultImg);
-            cdHistory.setResult(jsTemp.toJSONString());
-            if(cdHistoryService.updateById(cdHistory)){
-                return Result.success(jsTemp);
-            }
-            else{
-                return Result.error("-1", "保存结果失败");
-            }
-
-        } catch (Exception e) {
-            System.out.println(e);
+        String type = "change_detection";
+        JSONObject result = cdHistoryService.process(historyId, url, fileName1, fileName2, type, historyConfig);
+        if (result != null) {
+            return Result.success(result);
+        } else {
+            return Result.error("-1", "地物分类失败");
         }
-        return Result.error("-1", "变化检测失败");
     }
 
 
