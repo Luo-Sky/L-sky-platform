@@ -2,29 +2,21 @@ package com.rs.platform.controller;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rs.platform.common.Result;
 import com.rs.platform.entity.HistoryConfig;
-import com.rs.platform.entity.OcHistory;
 import com.rs.platform.entity.OdHistory;
-import com.rs.platform.entity.OeHistory;
 import com.rs.platform.service.IOdHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 
@@ -82,8 +74,8 @@ public class OdHistoryController {
         }
     }
 
-    @PostMapping("/process")
-    public Result<?> process(@RequestParam Long historyId, @RequestParam String flag, @RequestBody HistoryConfig historyConfig) throws IOException {
+    @PostMapping("/process/playground")
+    public Result<?> processPlayground(@RequestParam Long historyId, @RequestParam String flag, @RequestBody HistoryConfig historyConfig) throws IOException {
         String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
         String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件
@@ -91,15 +83,79 @@ public class OdHistoryController {
         //请求路径
         String url = ip + ":" + modelPort;
 
-        String type = "object_detection";
-        JSONObject result = odHistoryService.process(historyId, url, fileName, type, historyConfig);
+        String type = "object_detection_playground";
+
+        JSONObject result;
+        if (historyConfig.getTop() == null) {
+            result = odHistoryService.process(historyId, url, fileName, type, historyConfig);
+        } else {
+            result = odHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+        }
         if (result != null) {
             return Result.success(result);
         } else {
-            return Result.error("-1", "目标检测失败");
+            return Result.error("-1", "playground目标检测失败");
         }
     }
 
+    @PostMapping("/process/overpass")
+    public Result<?> processOverpass(@RequestParam Long historyId, @RequestParam String flag, @RequestBody HistoryConfig historyConfig) throws IOException {
+        String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
+        List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
+        String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件
+
+        //请求路径
+        String url = ip + ":" + modelPort;
+
+        String type = "object_detection_overpass";
+
+        JSONObject result;
+        if (historyConfig.getTop() == null) {
+            result = odHistoryService.process(historyId, url, fileName, type, historyConfig);
+        } else {
+            result = odHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+        }
+        if (result != null) {
+            return Result.success(result);
+        } else {
+            return Result.error("-1", "overpass目标检测失败");
+        }
+    }
+
+    @PostMapping("/process/aircraft")
+    public Result<?> processAircraft(@RequestParam Long historyId, @RequestParam String flag, @RequestBody HistoryConfig historyConfig) throws IOException {
+        String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
+        List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
+        String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件
+
+        //请求路径
+        String url = ip + ":" + modelPort;
+
+        String type = "object_detection_aircraft";
+
+        JSONObject result;
+        if (historyConfig.getTop() == null) {
+            result = odHistoryService.process(historyId, url, fileName, type, historyConfig);
+        } else {
+            result = odHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+        }
+        if (result != null) {
+            return Result.success(result);
+        } else {
+            return Result.error("-1", "aircraft目标检测失败");
+        }
+    }
+
+
+    //操作记录内容修改,通过id修改名称和是否存在框选
+    @PutMapping
+    public Result<?> update(@RequestBody OdHistory odHistory) {
+        if (odHistoryService.updateById(odHistory)) {
+            return Result.success();
+        } else {
+            return Result.error("-1", "目标检测历史记录更新失败");
+        }
+    }
 
     //删除一条目标检测任务记录
     @DeleteMapping("/{id}")
@@ -128,7 +184,7 @@ public class OdHistoryController {
                               @RequestParam(defaultValue = "10") Integer pageSize,
                               @RequestParam(defaultValue = "") Long projectId) {
         LambdaQueryWrapper<OdHistory> wrapper = Wrappers.lambdaQuery();
-        wrapper.like(OdHistory::getProjectId, projectId);
+        wrapper.eq(OdHistory::getProjectId, projectId);
 
         Page<OdHistory> repairPage = odHistoryService.page(new Page<>(pageNum, pageSize), wrapper);
         return Result.success(repairPage);

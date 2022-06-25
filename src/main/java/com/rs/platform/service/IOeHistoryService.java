@@ -13,4 +13,5 @@ import com.rs.platform.entity.OeHistory;
 public interface IOeHistoryService extends IService<OeHistory> {
     JSONObject process(Long historyId, String url, String fileName, String type, HistoryConfig historyConfig);
 
+    JSONObject processBoxSelection(Long historyId, String url, String fileName, String type, HistoryConfig historyConfig);
 }

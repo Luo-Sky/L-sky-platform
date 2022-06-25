@@ -2,9 +2,8 @@ package com.rs.platform.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.rs.platform.entity.HistoryConfig;
-import com.rs.platform.entity.OdHistory;
-import com.rs.platform.entity.OeHistory;
+import com.rs.platform.entity.*;
+import com.rs.platform.mapper.BoxSelectionMapper;
 import com.rs.platform.mapper.OdHistoryMapper;
 import com.rs.platform.mapper.OeHistoryMapper;
 import com.rs.platform.service.IOdHistoryService;
@@ -25,6 +24,9 @@ public class OdHistoryServiceImpl extends ServiceImpl<OdHistoryMapper, OdHistory
 
     @Autowired
     private OdHistoryMapper odHistorytMapper;
+
+    @Autowired
+    private BoxSelectionMapper boxSelectionMapper;
 
     //使用Restemplate来发送HTTP请求
     @Autowired
@@ -69,6 +71,7 @@ public class OdHistoryServiceImpl extends ServiceImpl<OdHistoryMapper, OdHistory
             odHistory.setEndTime(new Date());
             odHistory.setResultImg(resultImg);
             odHistory.setResult(jsTemp.toJSONString());
+            odHistory.setChoose(0);
             if (odHistorytMapper.updateById(odHistory) == 1) {
                 return jsTemp;
             } else {
@@ -80,4 +83,67 @@ public class OdHistoryServiceImpl extends ServiceImpl<OdHistoryMapper, OdHistory
         }
         return null;
     }
+
+    @Override
+    public JSONObject processBoxSelection(Long historyId, String url, String fileName, String type, HistoryConfig historyConfig) {
+        BoxSelection boxSelection = new BoxSelection();
+        boxSelection.setStartTime(new Date());
+        boxSelection.setType(2);
+        boxSelection.setTopRow(historyConfig.getTop());
+        boxSelection.setLeftColumn(historyConfig.getLeft());
+        boxSelection.setBottomRow(historyConfig.getBottom());
+        boxSelection.setRightColumn(historyConfig.getRight());
+
+        LinkedMultiValueMap<String, String> body = new LinkedMultiValueMap();
+        body.add("type", type);
+        body.add("img", fileName);
+        body.add("top", historyConfig.getTop().toString());
+        body.add("left", historyConfig.getLeft().toString());
+        body.add("bottom", historyConfig.getBottom().toString());
+        body.add("right", historyConfig.getRight().toString());
+        if (historyConfig.getConfidence() != null) {
+            body.add("confidence", historyConfig.getConfidence());
+        }
+        if (historyConfig.getMinPixel() != null) {
+            body.add("min_pixel", historyConfig.getMinPixel().toString());
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // 请求体，包括请求数据 body 和 请求头 headers
+        HttpEntity httpEntity = new HttpEntity(body, headers);
+
+        try {
+            //使用 exchange 发送请求，以String的类型接收返回的数据
+            //ps，我请求的数据，其返回是一个json
+            ResponseEntity<String> strbody = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+            //解析返回的数据
+            JSONObject jsTemp = JSONObject.parseObject(strbody.getBody());
+            System.out.println(jsTemp);
+
+            String resultImg = (String) jsTemp.get("label");
+
+            boxSelection.setHistoryId(historyId);
+            boxSelection.setEndTime(new Date());
+            boxSelection.setResultImg(resultImg);
+            boxSelection.setResult(jsTemp.toJSONString());
+
+            OdHistory odHistory = new OdHistory();
+            odHistory.setId(historyId);
+            odHistory.setChoose(1);
+            if (boxSelectionMapper.insert(boxSelection) == 1 && odHistorytMapper.updateById(odHistory) == 1) {
+                return jsTemp;
+            } else {
+                System.out.println("目标检测的保存记录操作失败");
+                return null;
+            }
+
+        } catch (Exception e) {
+            System.out.println(e + "目标检测发送请求异常");
+        }
+        return null;
+    }
+
 }
+

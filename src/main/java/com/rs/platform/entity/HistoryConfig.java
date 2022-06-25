@@ -9,6 +9,10 @@ import lombok.Data;
 
 @Data
 public class HistoryConfig {
-    String confidence;
-    Integer minPixel;
+    private String confidence;
+    private Integer minPixel;
+    private Integer top;
+    private Integer left;
+    private Integer bottom;
+    private Integer right;
 }

@@ -12,4 +12,6 @@ import com.rs.platform.entity.OdHistory;
 public interface IOdHistoryService extends IService<OdHistory> {
 
     JSONObject process(Long historyId, String url, String fileName, String type, HistoryConfig historyConfig);
+
+    JSONObject processBoxSelection(Long historyId, String url, String fileName, String type, HistoryConfig historyConfig);
 }

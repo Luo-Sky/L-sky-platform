@@ -24,5 +24,6 @@ public class OcHistory {
     private String sourceImg;
     private String resultImg;
     private String result;
+    private Integer choose;   //是否存在框选 0为否，1为存在
 }
 

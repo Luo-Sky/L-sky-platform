@@ -10,6 +10,7 @@ import com.rs.platform.common.Result;
 import com.rs.platform.entity.CdHistory;
 import com.rs.platform.entity.HistoryConfig;
 import com.rs.platform.entity.OdHistory;
+import com.rs.platform.entity.Project;
 import com.rs.platform.service.ICdHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,9 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author : hongbo
@@ -103,14 +102,30 @@ public class CdHistoryController {
         String url = ip + ":" + modelPort;
 
         String type = "change_detection";
-        JSONObject result = cdHistoryService.process(historyId, url, fileName1, fileName2, type, historyConfig);
+
+        JSONObject result;
+        if (historyConfig.getTop() == null) {
+            result = cdHistoryService.process(historyId, url, fileName1, fileName2, type, historyConfig);
+        } else {
+            result = cdHistoryService.processBoxSelection(historyId, url, fileName1, fileName2, type, historyConfig);
+        }
         if (result != null) {
             return Result.success(result);
         } else {
-            return Result.error("-1", "地物分类失败");
+            return Result.error("-1", "变化检测失败");
         }
     }
 
+
+    //操作记录内容修改,通过id修改名称和是否存在框选
+    @PutMapping
+    public Result<?> update(@RequestBody CdHistory cdHistory) {
+        if (cdHistoryService.updateById(cdHistory)) {
+            return Result.success();
+        } else {
+            return Result.error("-1", "变化检测历史记录更新失败");
+        }
+    }
 
     //删除一条变化检测任务记录
     @DeleteMapping("/{id}")
@@ -139,7 +154,7 @@ public class CdHistoryController {
                               @RequestParam(defaultValue = "10") Integer pageSize,
                               @RequestParam(defaultValue = "") Long projectId) {
         LambdaQueryWrapper<CdHistory> wrapper = Wrappers.lambdaQuery();
-        wrapper.like(CdHistory::getProjectId, projectId);
+        wrapper.eq(CdHistory::getProjectId, projectId);
 
         Page<CdHistory> repairPage = cdHistoryService.page(new Page<>(pageNum, pageSize), wrapper);
         return Result.success(repairPage);

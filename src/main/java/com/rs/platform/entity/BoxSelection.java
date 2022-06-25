@@ -9,22 +9,22 @@ import java.util.Date;
 
 /**
  * @author : hongbo
- * @create 2022-05-06-19:57
+ * @create 2022-06-24-14:51
  **/
 
-@TableName("cdhistory")
+@TableName("boxSelection")
 @Data
-public class CdHistory {
+public class BoxSelection {
     @TableId(value ="id", type = IdType.AUTO)
     private Long id;
-    private Long projectId;
-    private String title;
+    private Integer type;  //区别四个任务 0cd变化检测 1oc地物分类 2od目标检测 3oe目标提取
+    private Long historyId;
     private Date startTime;
     private Date endTime;
-    private String sourceImg1;
-    private String sourceImg2;
+    private Integer topRow;
+    private Integer leftColumn;
+    private Integer bottomRow;
+    private Integer rightColumn;
     private String resultImg;
     private String result;
-    private Integer choose; //是否存在框选 0为否，1为存在
 }
-

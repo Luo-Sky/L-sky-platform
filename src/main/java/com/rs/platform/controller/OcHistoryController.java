@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rs.platform.common.Result;
+import com.rs.platform.entity.CdHistory;
 import com.rs.platform.entity.HistoryConfig;
 import com.rs.platform.entity.OcHistory;
 import com.rs.platform.entity.OdHistory;
@@ -91,11 +92,17 @@ public class OcHistoryController {
         String url = ip + ":" + modelPort;
 
         String type = "segmentation_5classes";
-        JSONObject result = ocHistoryService.process(historyId, url, fileName, type, historyConfig);
+        JSONObject result;
+        if (historyConfig.getTop() == null) {
+            result = ocHistoryService.process(historyId, url, fileName, type, historyConfig);
+        }
+        else{
+            result = ocHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+        }
         if (result != null) {
             return Result.success(result);
         } else {
-            return Result.error("-1", "地物分类失败");
+            return Result.error("-1", "地物分类5类失败");
         }
     }
 
@@ -109,14 +116,30 @@ public class OcHistoryController {
         String url = ip + ":" + modelPort;
 
         String type = "segmentation_15classes";
-        JSONObject result = ocHistoryService.process(historyId, url, fileName, type, historyConfig);
+        JSONObject result;
+        if (historyConfig.getTop() == null) {
+            result = ocHistoryService.process(historyId, url, fileName, type, historyConfig);
+        }
+        else{
+            result = ocHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+        }
         if (result != null) {
             return Result.success(result);
         } else {
-            return Result.error("-1", "地物分类失败");
+            return Result.error("-1", "地物分类15类失败");
         }
     }
 
+
+    //操作记录内容修改,通过id修改名称和是否存在框选
+    @PutMapping
+    public Result<?> update(@RequestBody OcHistory ocHistory) {
+        if (ocHistoryService.updateById(ocHistory)) {
+            return Result.success();
+        } else {
+            return Result.error("-1", "地物分类历史记录更新失败");
+        }
+    }
 
     //删除一条地物分类任务记录
     @DeleteMapping("/{id}")
@@ -145,7 +168,7 @@ public class OcHistoryController {
                               @RequestParam(defaultValue = "10") Integer pageSize,
                               @RequestParam(defaultValue = "") Long projectId) {
         LambdaQueryWrapper<OcHistory> wrapper = Wrappers.lambdaQuery();
-        wrapper.like(OcHistory::getProjectId, projectId);
+        wrapper.eq(OcHistory::getProjectId, projectId);
 
         Page<OcHistory> repairPage = ocHistoryService.page(new Page<>(pageNum, pageSize), wrapper);
         return Result.success(repairPage);

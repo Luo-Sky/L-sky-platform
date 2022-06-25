@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rs.platform.common.Result;
 import com.rs.platform.entity.HistoryConfig;
+import com.rs.platform.entity.OdHistory;
 import com.rs.platform.entity.OeHistory;
 import com.rs.platform.service.IOeHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,8 +78,8 @@ public class OeHistoryController {
         }
     }
 
-    @PostMapping("/process")
-    public Result<?> process(@RequestParam Long historyId, @RequestParam String flag, @RequestBody HistoryConfig historyConfig) throws IOException {
+    @PostMapping("/process/road")
+    public Result<?> processRoad(@RequestParam Long historyId, @RequestParam String flag, @RequestBody HistoryConfig historyConfig) throws IOException {
         String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
         String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件//请求路径
@@ -86,24 +87,72 @@ public class OeHistoryController {
         String url = ip + ":" + modelPort;
         String type = "road_extraction";
 
-        JSONObject result = oeHistoryService.process(historyId, url, fileName, type, historyConfig);
+        JSONObject result;
+        if(historyConfig.getTop() == null) {
+            result = oeHistoryService.process(historyId, url, fileName, type, historyConfig);
+        }else{
+            result = oeHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+        }
         if (result != null) {
             return Result.success(result);
         } else {
-            return Result.error("-1", "目标提取失败");
+            return Result.error("-1", "road目标提取失败");
         }
     }
 
+    @PostMapping("/process/water")
+    public Result<?> processWater(@RequestParam Long historyId, @RequestParam String flag, @RequestBody HistoryConfig historyConfig) throws IOException {
+        String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
+        List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
+        String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件//请求路径
 
-//    //目标提取任务内容修改
-//    @PutMapping
-//    public Result<?> update(@RequestBody OeHistory oeHistory){
-//        if(oeHistoryService.updateById(oeHistory)) {
-//            return Result.success();
-//        }else{
-//            return Result.error("-1","项目更新失败");
-//        }
-//    }
+        String url = ip + ":" + modelPort;
+        String type = "water_extraction";
+
+        JSONObject result;
+        if(historyConfig.getTop() == null) {
+            result = oeHistoryService.process(historyId, url, fileName, type, historyConfig);
+        }else{
+            result = oeHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+        }
+        if (result != null) {
+            return Result.success(result);
+        } else {
+            return Result.error("-1", "water目标提取失败");
+        }
+    }
+
+    @PostMapping("/process/buildup")
+    public Result<?> processBuildup(@RequestParam Long historyId, @RequestParam String flag, @RequestBody HistoryConfig historyConfig) throws IOException {
+        String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
+        List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
+        String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件//请求路径
+
+        String url = ip + ":" + modelPort;
+        String type = "buildup_extraction";
+
+        JSONObject result;
+        if(historyConfig.getTop() == null) {
+            result = oeHistoryService.process(historyId, url, fileName, type, historyConfig);
+        }else{
+            result = oeHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+        }
+        if (result != null) {
+            return Result.success(result);
+        } else {
+            return Result.error("-1", "buildup目标提取失败");
+        }
+    }
+
+    //操作记录内容修改,通过id修改名称和是否存在框选
+    @PutMapping
+    public Result<?> update(@RequestBody OeHistory oeHistory) {
+        if (oeHistoryService.updateById(oeHistory)) {
+            return Result.success();
+        } else {
+            return Result.error("-1", "目标提取历史记录更新失败");
+        }
+    }
 
     //删除一条目标提取任务记录
     @DeleteMapping("/{id}")
@@ -132,7 +181,7 @@ public class OeHistoryController {
                               @RequestParam(defaultValue = "10") Integer pageSize,
                               @RequestParam(defaultValue = "") Long projectId) {
         LambdaQueryWrapper<OeHistory> wrapper = Wrappers.<OeHistory>lambdaQuery();
-        wrapper.like(OeHistory::getProjectId, projectId);
+        wrapper.eq(OeHistory::getProjectId, projectId);
 
         Page<OeHistory> repairPage = oeHistoryService.page(new Page<>(pageNum, pageSize), wrapper);
         return Result.success(repairPage);

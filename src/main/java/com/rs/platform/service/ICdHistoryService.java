@@ -11,4 +11,5 @@ import com.rs.platform.entity.HistoryConfig;
  **/
 public interface ICdHistoryService extends IService<CdHistory> {
     JSONObject process(Long historyId, String url, String fileName1, String fileName2, String type, HistoryConfig historyConfig);
+    JSONObject processBoxSelection(Long historyId, String url, String fileName1, String fileName2, String type, HistoryConfig historyConfig);
 }
