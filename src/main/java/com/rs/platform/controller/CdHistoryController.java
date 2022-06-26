@@ -2,6 +2,7 @@ package com.rs.platform.controller;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -152,10 +153,13 @@ public class CdHistoryController {
     @GetMapping
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum,
                               @RequestParam(defaultValue = "10") Integer pageSize,
-                              @RequestParam(defaultValue = "") Long projectId) {
+                              @RequestParam(defaultValue = "") Long projectId,
+                              @RequestParam(defaultValue = "") String search) {
         LambdaQueryWrapper<CdHistory> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(CdHistory::getProjectId, projectId);
-
+        if (StrUtil.isNotBlank(search)) {
+            wrapper.like(CdHistory::getTitle, search);
+        }
         Page<CdHistory> repairPage = cdHistoryService.page(new Page<>(pageNum, pageSize), wrapper);
         return Result.success(repairPage);
     }

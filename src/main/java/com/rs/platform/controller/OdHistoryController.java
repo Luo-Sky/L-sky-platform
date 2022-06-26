@@ -2,12 +2,14 @@ package com.rs.platform.controller;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rs.platform.common.Result;
 import com.rs.platform.entity.HistoryConfig;
+import com.rs.platform.entity.OcHistory;
 import com.rs.platform.entity.OdHistory;
 import com.rs.platform.service.IOdHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -182,10 +184,13 @@ public class OdHistoryController {
     @GetMapping
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum,
                               @RequestParam(defaultValue = "10") Integer pageSize,
-                              @RequestParam(defaultValue = "") Long projectId) {
+                              @RequestParam(defaultValue = "") Long projectId,
+                              @RequestParam(defaultValue = "") String search) {
         LambdaQueryWrapper<OdHistory> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(OdHistory::getProjectId, projectId);
-
+        if (StrUtil.isNotBlank(search)) {
+            wrapper.like(OdHistory::getTitle, search);
+        }
         Page<OdHistory> repairPage = odHistoryService.page(new Page<>(pageNum, pageSize), wrapper);
         return Result.success(repairPage);
     }

@@ -2,6 +2,7 @@ package com.rs.platform.controller;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -179,10 +180,13 @@ public class OeHistoryController {
     @GetMapping
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum,
                               @RequestParam(defaultValue = "10") Integer pageSize,
-                              @RequestParam(defaultValue = "") Long projectId) {
+                              @RequestParam(defaultValue = "") Long projectId,
+                              @RequestParam(defaultValue = "") String search) {
         LambdaQueryWrapper<OeHistory> wrapper = Wrappers.<OeHistory>lambdaQuery();
         wrapper.eq(OeHistory::getProjectId, projectId);
-
+        if (StrUtil.isNotBlank(search)) {
+            wrapper.like(OeHistory::getTitle, search);
+        }
         Page<OeHistory> repairPage = oeHistoryService.page(new Page<>(pageNum, pageSize), wrapper);
         return Result.success(repairPage);
     }

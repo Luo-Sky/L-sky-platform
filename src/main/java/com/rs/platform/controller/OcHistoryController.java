@@ -8,10 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rs.platform.common.Result;
-import com.rs.platform.entity.CdHistory;
-import com.rs.platform.entity.HistoryConfig;
-import com.rs.platform.entity.OcHistory;
-import com.rs.platform.entity.OdHistory;
+import com.rs.platform.entity.*;
 import com.rs.platform.service.IOcHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -166,10 +163,13 @@ public class OcHistoryController {
     @GetMapping
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum,
                               @RequestParam(defaultValue = "10") Integer pageSize,
-                              @RequestParam(defaultValue = "") Long projectId) {
+                              @RequestParam(defaultValue = "") Long projectId,
+                              @RequestParam(defaultValue = "") String search) {
         LambdaQueryWrapper<OcHistory> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(OcHistory::getProjectId, projectId);
-
+        if (StrUtil.isNotBlank(search)) {
+            wrapper.like(OcHistory::getTitle, search);
+        }
         Page<OcHistory> repairPage = ocHistoryService.page(new Page<>(pageNum, pageSize), wrapper);
         return Result.success(repairPage);
     }
