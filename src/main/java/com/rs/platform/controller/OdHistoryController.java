@@ -36,7 +36,7 @@ public class OdHistoryController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("${server.port}")
+    @Value("${myconf.port}")
     private String port;
 
     @Value("${model.port}")
@@ -83,7 +83,8 @@ public class OdHistoryController {
         String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件
 
         //请求路径
-        String url = ip + ":" + modelPort;
+        String modelip = "http://localhost";
+        String url =  modelip + ":" + modelPort;
 
         String type = "object_detection_playground";
 
@@ -107,7 +108,8 @@ public class OdHistoryController {
         String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件
 
         //请求路径
-        String url = ip + ":" + modelPort;
+        String modelip = "http://localhost";
+        String url =  modelip + ":" + modelPort;
 
         String type = "object_detection_overpass";
 
@@ -131,7 +133,8 @@ public class OdHistoryController {
         String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件
 
         //请求路径
-        String url = ip + ":" + modelPort;
+        String modelip = "http://localhost";
+        String url =  modelip + ":" + modelPort;
 
         String type = "object_detection_aircraft";
 

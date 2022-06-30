@@ -39,7 +39,7 @@ public class CdHistoryController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("${server.port}")
+    @Value("${myconf.port}")
     private String port;
 
     @Value("${model.port}")
@@ -100,7 +100,8 @@ public class CdHistoryController {
         String fileName2 = basePath + fileNames.stream().filter(name -> name.contains(flag2)).findAny().orElse("");  // 找到跟参数一致的文件
 
         //请求路径
-        String url = ip + ":" + modelPort;
+        String modelip = "http://localhost";
+        String url =  modelip + ":" + modelPort;
 
         String type = "change_detection";
 

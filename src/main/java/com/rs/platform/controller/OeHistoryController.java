@@ -40,7 +40,7 @@ public class OeHistoryController {
     private RestTemplate restTemplate;
 
 
-    @Value("${server.port}")
+    @Value("${myconf.port}")
     private String port;
 
     @Value("${model.port}")
@@ -85,7 +85,10 @@ public class OeHistoryController {
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
         String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件//请求路径
 
-        String url = ip + ":" + modelPort;
+        //请求路径
+        String modelip = "http://localhost";
+        String url =  modelip + ":" + modelPort;
+
         String type = "road_extraction";
 
         JSONObject result;
@@ -107,7 +110,10 @@ public class OeHistoryController {
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
         String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件//请求路径
 
-        String url = ip + ":" + modelPort;
+        //请求路径
+        String modelip = "http://localhost";
+        String url =  modelip + ":" + modelPort;
+
         String type = "water_extraction";
 
         JSONObject result;
@@ -129,7 +135,10 @@ public class OeHistoryController {
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
         String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件//请求路径
 
-        String url = ip + ":" + modelPort;
+        //请求路径
+        String modelip = "http://localhost";
+        String url =  modelip + ":" + modelPort;
+
         String type = "buildup_extraction";
 
         JSONObject result;

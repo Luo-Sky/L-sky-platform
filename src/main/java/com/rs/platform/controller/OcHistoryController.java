@@ -39,7 +39,7 @@ public class OcHistoryController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("${server.port}")
+    @Value("${myconf.port}")
     private String port;
 
     @Value("${model.port}")
@@ -86,7 +86,8 @@ public class OcHistoryController {
         String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件
 
         //请求路径
-        String url = ip + ":" + modelPort;
+        String modelip = "http://localhost";
+        String url =  modelip + ":" + modelPort;
 
         String type = "segmentation_5classes";
         JSONObject result;
@@ -110,7 +111,8 @@ public class OcHistoryController {
         String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件
 
         //请求路径
-        String url = ip + ":" + modelPort;
+        String modelip = "http://localhost";
+        String url =  modelip + ":" + modelPort;
 
         String type = "segmentation_15classes";
         JSONObject result;

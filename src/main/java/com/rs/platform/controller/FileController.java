@@ -33,6 +33,7 @@ public class FileController {
         String fileName = fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件
         try {
             if (StrUtil.isNotEmpty(fileName)) {
+                response.addHeader("Access-Control-Expose-Headers","Content-Disposition");
                 response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
                 response.setContentType("application/octet-stream");
                 byte[] bytes = FileUtil.readBytes(basePath + fileName);  // 通过文件的路径读取文件字节流
