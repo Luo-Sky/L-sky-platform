@@ -1,4 +1,4 @@
-#L-sky-platform
+# L-sky-platform
 
 ## 系统描述
 
