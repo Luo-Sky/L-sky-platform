@@ -54,8 +54,10 @@ public class CdHistoryController {
     /**
      * 创建目标提取任务，保存操作
      *
-     * @param file
+     * @param file1
+     * @param file2
      * @param projectId
+     * @param title
      * @return
      * @throws IOException
      */
@@ -96,22 +98,26 @@ public class CdHistoryController {
     }
 
     @PostMapping("/process")
-    public Result<?> process(@RequestParam Long historyId, @RequestParam String flag1, @RequestParam String flag2, @RequestBody HistoryConfig historyConfig) throws IOException {
+    public Result<?> process(@RequestParam Long historyId, @RequestParam String flag1, @RequestParam String flag2, @RequestParam(defaultValue = "0") Integer batch, @RequestBody HistoryConfig historyConfig) throws IOException {
         String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
         String fileName1 = basePath + fileNames.stream().filter(name -> name.contains(flag1)).findAny().orElse("");  // 找到跟参数一致的文件
         String fileName2 = basePath + fileNames.stream().filter(name -> name.contains(flag2)).findAny().orElse("");  // 找到跟参数一致的文件
 
         //请求路径
-        String url =  modelIp + ":" + modelPort;
+        String url = modelIp + ":" + modelPort;
 
         String type = "change_detection";
 
         JSONObject result;
-        if (historyConfig.getTop() == null) {
-            result = cdHistoryService.process(historyId, url, fileName1, fileName2, type, historyConfig);
-        } else {
+        if (batch == 1) {
             result = cdHistoryService.processBoxSelection(historyId, url, fileName1, fileName2, type, historyConfig);
+        } else {
+            if (historyConfig.getTop() == null) {
+                result = cdHistoryService.process(historyId, url, fileName1, fileName2, type, historyConfig);
+            } else {
+                result = cdHistoryService.processBoxSelection(historyId, url, fileName1, fileName2, type, historyConfig);
+            }
         }
         if (result != null) {
             return Result.success(result);

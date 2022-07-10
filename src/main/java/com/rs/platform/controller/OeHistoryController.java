@@ -83,21 +83,25 @@ public class OeHistoryController {
     }
 
     @PostMapping("/process/road")
-    public Result<?> processRoad(@RequestParam Long historyId, @RequestParam String flag, @RequestBody HistoryConfig historyConfig) throws IOException {
+    public Result<?> processRoad(@RequestParam Long historyId, @RequestParam String flag, @RequestParam(defaultValue = "0") Integer batch, @RequestBody HistoryConfig historyConfig) throws IOException {
         String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
         String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件//请求路径
 
         //请求路径
-        String url =  modelIp + ":" + modelPort;
+        String url = modelIp + ":" + modelPort;
 
         String type = "road_extraction";
 
         JSONObject result;
-        if(historyConfig.getTop() == null) {
-            result = oeHistoryService.process(historyId, url, fileName, type, historyConfig);
-        }else{
+        if (batch == 1) {
             result = oeHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+        } else {
+            if (historyConfig.getTop() == null) {
+                result = oeHistoryService.process(historyId, url, fileName, type, historyConfig);
+            } else {
+                result = oeHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+            }
         }
         if (result != null) {
             return Result.success(result);
@@ -107,21 +111,25 @@ public class OeHistoryController {
     }
 
     @PostMapping("/process/water")
-    public Result<?> processWater(@RequestParam Long historyId, @RequestParam String flag, @RequestBody HistoryConfig historyConfig) throws IOException {
+    public Result<?> processWater(@RequestParam Long historyId, @RequestParam String flag, @RequestParam(defaultValue = "0") Integer batch, @RequestBody HistoryConfig historyConfig) throws IOException {
         String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
         String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件//请求路径
 
         //请求路径
-        String url =  modelIp + ":" + modelPort;
+        String url = modelIp + ":" + modelPort;
 
         String type = "water_extraction";
 
         JSONObject result;
-        if(historyConfig.getTop() == null) {
-            result = oeHistoryService.process(historyId, url, fileName, type, historyConfig);
-        }else{
+        if (batch == 1) {
             result = oeHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+        } else {
+            if (historyConfig.getTop() == null) {
+                result = oeHistoryService.process(historyId, url, fileName, type, historyConfig);
+            } else {
+                result = oeHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+            }
         }
         if (result != null) {
             return Result.success(result);
@@ -131,21 +139,25 @@ public class OeHistoryController {
     }
 
     @PostMapping("/process/buildup")
-    public Result<?> processBuildup(@RequestParam Long historyId, @RequestParam String flag, @RequestBody HistoryConfig historyConfig) throws IOException {
+    public Result<?> processBuildup(@RequestParam Long historyId, @RequestParam String flag, @RequestParam(defaultValue = "0") Integer batch, @RequestBody HistoryConfig historyConfig) throws IOException {
         String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
         String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件//请求路径
 
         //请求路径
-        String url =  modelIp + ":" + modelPort;
+        String url = modelIp + ":" + modelPort;
 
         String type = "buildup_extraction";
 
         JSONObject result;
-        if(historyConfig.getTop() == null) {
-            result = oeHistoryService.process(historyId, url, fileName, type, historyConfig);
-        }else{
+        if (batch == 1) {
             result = oeHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+        } else {
+            if (historyConfig.getTop() == null) {
+                result = oeHistoryService.process(historyId, url, fileName, type, historyConfig);
+            } else {
+                result = oeHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+            }
         }
         if (result != null) {
             return Result.success(result);

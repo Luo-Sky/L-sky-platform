@@ -83,21 +83,24 @@ public class OcHistoryController {
     }
 
     @PostMapping("/process/5")
-    public Result<?> process5classes(@RequestParam Long historyId, @RequestParam String flag, @RequestBody HistoryConfig historyConfig) throws IOException {
+    public Result<?> process5classes(@RequestParam Long historyId, @RequestParam String flag, @RequestParam(defaultValue = "0") Integer batch, @RequestBody HistoryConfig historyConfig) throws IOException {
         String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
         String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件
 
         //请求路径
-        String url =  modelIp + ":" + modelPort;
+        String url = modelIp + ":" + modelPort;
 
         String type = "segmentation_5classes";
         JSONObject result;
-        if (historyConfig.getTop() == null) {
-            result = ocHistoryService.process(historyId, url, fileName, type, historyConfig);
-        }
-        else{
+        if (batch == 1) {
             result = ocHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+        } else {
+            if (historyConfig.getTop() == null) {
+                result = ocHistoryService.process(historyId, url, fileName, type, historyConfig);
+            } else {
+                result = ocHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+            }
         }
         if (result != null) {
             return Result.success(result);
@@ -107,21 +110,24 @@ public class OcHistoryController {
     }
 
     @PostMapping("/process/15")
-    public Result<?> process15classes(@RequestParam Long historyId, @RequestParam String flag, @RequestBody HistoryConfig historyConfig) throws IOException {
+    public Result<?> process15classes(@RequestParam Long historyId, @RequestParam String flag, @RequestParam(defaultValue = "0") Integer batch, @RequestBody HistoryConfig historyConfig) throws IOException {
         String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
         String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件
 
         //请求路径
-        String url =  modelIp + ":" + modelPort;
+        String url = modelIp + ":" + modelPort;
 
         String type = "segmentation_15classes";
         JSONObject result;
-        if (historyConfig.getTop() == null) {
-            result = ocHistoryService.process(historyId, url, fileName, type, historyConfig);
-        }
-        else{
+        if (batch == 1) {
             result = ocHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+        } else {
+            if (historyConfig.getTop() == null) {
+                result = ocHistoryService.process(historyId, url, fileName, type, historyConfig);
+            } else {
+                result = ocHistoryService.processBoxSelection(historyId, url, fileName, type, historyConfig);
+            }
         }
         if (result != null) {
             return Result.success(result);
