@@ -2,10 +2,11 @@ package com.rs.platform.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.rs.platform.entity.*;
+import com.rs.platform.entity.BoxSelection;
+import com.rs.platform.entity.HistoryConfig;
+import com.rs.platform.entity.OdHistory;
 import com.rs.platform.mapper.BoxSelectionMapper;
 import com.rs.platform.mapper.OdHistoryMapper;
-import com.rs.platform.mapper.OeHistoryMapper;
 import com.rs.platform.service.IOdHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -23,12 +24,12 @@ import java.util.Date;
 public class OdHistoryServiceImpl extends ServiceImpl<OdHistoryMapper, OdHistory> implements IOdHistoryService {
 
     @Autowired
-    private OdHistoryMapper odHistorytMapper;
+    private OdHistoryMapper odHistoryMapper;
 
     @Autowired
     private BoxSelectionMapper boxSelectionMapper;
 
-    //使用Restemplate来发送HTTP请求
+    //使用RestTemplate来发送HTTP请求
     @Autowired
     private RestTemplate restTemplate;
 
@@ -72,7 +73,7 @@ public class OdHistoryServiceImpl extends ServiceImpl<OdHistoryMapper, OdHistory
             odHistory.setResultImg(resultImg);
             odHistory.setResult(jsTemp.toJSONString());
             odHistory.setChoose(0);
-            if (odHistorytMapper.updateById(odHistory) == 1) {
+            if (odHistoryMapper.updateById(odHistory) == 1) {
                 return jsTemp;
             } else {
                 System.out.println("目标检测的保存记录操作失败");
@@ -133,7 +134,7 @@ public class OdHistoryServiceImpl extends ServiceImpl<OdHistoryMapper, OdHistory
             OdHistory odHistory = new OdHistory();
             odHistory.setId(historyId);
             odHistory.setChoose(1);
-            if (boxSelectionMapper.insert(boxSelection) == 1 && odHistorytMapper.updateById(odHistory) == 1) {
+            if (boxSelectionMapper.insert(boxSelection) == 1 && odHistoryMapper.updateById(odHistory) == 1) {
                 return jsTemp;
             } else {
                 System.out.println("目标检测的保存记录操作失败");

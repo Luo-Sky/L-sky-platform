@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rs.platform.common.Result;
 import com.rs.platform.entity.HistoryConfig;
-import com.rs.platform.entity.OcHistory;
 import com.rs.platform.entity.OdHistory;
 import com.rs.platform.service.IOdHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,7 @@ public class OdHistoryController {
     @Autowired
     IOdHistoryService odHistoryService;
 
-    //使用Restemplate来发送HTTP请求
+    //使用RestTemplate来发送HTTP请求
     @Autowired
     private RestTemplate restTemplate;
 

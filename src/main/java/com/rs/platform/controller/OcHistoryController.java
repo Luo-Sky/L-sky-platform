@@ -8,20 +8,16 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rs.platform.common.Result;
-import com.rs.platform.entity.*;
+import com.rs.platform.entity.HistoryConfig;
+import com.rs.platform.entity.OcHistory;
 import com.rs.platform.service.IOcHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +31,7 @@ public class OcHistoryController {
     @Autowired
     IOcHistoryService ocHistoryService;
 
-    //使用Restemplate来发送HTTP请求
+    //使用RestTemplate来发送HTTP请求
     @Autowired
     private RestTemplate restTemplate;
 

@@ -9,17 +9,13 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rs.platform.common.Result;
 import com.rs.platform.entity.HistoryConfig;
-import com.rs.platform.entity.OdHistory;
 import com.rs.platform.entity.OeHistory;
 import com.rs.platform.service.IOeHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-
 
 import java.io.IOException;
 import java.util.Date;
@@ -35,7 +31,7 @@ public class OeHistoryController {
     @Autowired
     IOeHistoryService oeHistoryService;
 
-    //使用Restemplate来发送HTTP请求
+    //使用RestTemplate来发送HTTP请求
     @Autowired
     private RestTemplate restTemplate;
 

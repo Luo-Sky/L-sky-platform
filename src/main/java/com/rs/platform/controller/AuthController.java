@@ -4,8 +4,6 @@ import com.rs.platform.common.Result;
 import com.rs.platform.entity.User;
 import com.rs.platform.service.AuthService;
 import com.rs.platform.service.dto.AuthUserDto;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**

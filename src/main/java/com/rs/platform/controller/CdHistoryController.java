@@ -10,13 +10,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rs.platform.common.Result;
 import com.rs.platform.entity.CdHistory;
 import com.rs.platform.entity.HistoryConfig;
-import com.rs.platform.entity.OdHistory;
-import com.rs.platform.entity.Project;
 import com.rs.platform.service.ICdHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,7 +31,7 @@ public class CdHistoryController {
     @Autowired
     ICdHistoryService cdHistoryService;
 
-    //使用Restemplate来发送HTTP请求
+    //使用RestTemplate来发送HTTP请求
     @Autowired
     private RestTemplate restTemplate;
 

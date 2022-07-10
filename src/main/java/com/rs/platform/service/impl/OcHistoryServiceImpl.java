@@ -2,7 +2,9 @@ package com.rs.platform.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.rs.platform.entity.*;
+import com.rs.platform.entity.BoxSelection;
+import com.rs.platform.entity.HistoryConfig;
+import com.rs.platform.entity.OcHistory;
 import com.rs.platform.mapper.BoxSelectionMapper;
 import com.rs.platform.mapper.OcHistoryMapper;
 import com.rs.platform.service.IOcHistoryService;
@@ -27,7 +29,7 @@ public class OcHistoryServiceImpl extends ServiceImpl<OcHistoryMapper, OcHistory
     @Autowired
     private BoxSelectionMapper boxSelectionMapper;
 
-    //使用Restemplate来发送HTTP请求
+    //使用RestTemplate来发送HTTP请求
     @Autowired
     private RestTemplate restTemplate;
 

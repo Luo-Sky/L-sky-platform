@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.rs.platform.entity.BoxSelection;
 import com.rs.platform.entity.HistoryConfig;
-import com.rs.platform.entity.OdHistory;
 import com.rs.platform.entity.OeHistory;
 import com.rs.platform.mapper.BoxSelectionMapper;
 import com.rs.platform.mapper.OeHistoryMapper;
@@ -25,12 +24,12 @@ import java.util.Date;
 public class OeHistoryServiceImpl extends ServiceImpl<OeHistoryMapper, OeHistory> implements IOeHistoryService {
 
     @Autowired
-    private OeHistoryMapper oeHistorytMapper;
+    private OeHistoryMapper oeHistoryMapper;
 
     @Autowired
     private BoxSelectionMapper boxSelectionMapper;
 
-    //使用Restemplate来发送HTTP请求
+    //使用RestTemplate来发送HTTP请求
     @Autowired
     private RestTemplate restTemplate;
 
@@ -86,7 +85,7 @@ public class OeHistoryServiceImpl extends ServiceImpl<OeHistoryMapper, OeHistory
             oeHistory.setResultImg(resultImg);
             oeHistory.setResult(jsTemp.toJSONString());
             oeHistory.setChoose(0);
-            if (oeHistorytMapper.updateById(oeHistory) == 1) {
+            if (oeHistoryMapper.updateById(oeHistory) == 1) {
                 return jsTemp;
             } else {
                 System.out.println("目标提取的保存记录操作失败");
@@ -149,7 +148,7 @@ public class OeHistoryServiceImpl extends ServiceImpl<OeHistoryMapper, OeHistory
             OeHistory oeHistory = new OeHistory();
             oeHistory.setId(historyId);
             oeHistory.setChoose(1);
-            if (boxSelectionMapper.insert(boxSelection) == 1 && oeHistorytMapper.updateById(oeHistory) == 1) {
+            if (boxSelectionMapper.insert(boxSelection) == 1 && oeHistoryMapper.updateById(oeHistory) == 1) {
                 return jsTemp;
             } else {
                 System.out.println("目标提取的保存记录操作失败");
