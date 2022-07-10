@@ -22,7 +22,7 @@ spring:
     username:
     password:
     properties:
-      mail:git pull
+      mail:
         smtp:
           ssl:
             enable: true
