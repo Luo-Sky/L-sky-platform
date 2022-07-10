@@ -42,6 +42,9 @@ public class CdHistoryController {
     @Value("${myconf.port}")
     private String port;
 
+    @Value("${model.ip}")
+    private String modelIp;
+
     @Value("${model.port}")
     private String modelPort;
 
@@ -100,8 +103,7 @@ public class CdHistoryController {
         String fileName2 = basePath + fileNames.stream().filter(name -> name.contains(flag2)).findAny().orElse("");  // 找到跟参数一致的文件
 
         //请求路径
-        String modelip = "http://localhost";
-        String url =  modelip + ":" + modelPort;
+        String url =  modelIp + ":" + modelPort;
 
         String type = "change_detection";
 

@@ -57,6 +57,7 @@ myconf:
   port: 9090
 
 model:
+  ip: http://localhost
   port: 8000
 
 mybatis-plus:
