@@ -18,6 +18,7 @@ public class BoxSelection {
     @TableId(value ="id", type = IdType.AUTO)
     private Long id;
     private Integer type;  //区别四个任务 0cd变化检测 1oc地物分类 2od目标检测 3oe目标提取
+    private String task;   //四个任务下的具体的任务名称
     private Long historyId;
     private Date startTime;
     private Date endTime;

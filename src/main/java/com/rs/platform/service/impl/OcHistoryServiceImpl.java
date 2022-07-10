@@ -88,6 +88,7 @@ public class OcHistoryServiceImpl extends ServiceImpl<OcHistoryMapper, OcHistory
         BoxSelection boxSelection = new BoxSelection();
         boxSelection.setStartTime(new Date());
         boxSelection.setType(1);
+        boxSelection.setTask(type);
         boxSelection.setTopRow(historyConfig.getTop());
         boxSelection.setLeftColumn(historyConfig.getLeft());
         boxSelection.setBottomRow(historyConfig.getBottom());

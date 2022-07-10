@@ -105,6 +105,7 @@ public class OeHistoryServiceImpl extends ServiceImpl<OeHistoryMapper, OeHistory
         BoxSelection boxSelection = new BoxSelection();
         boxSelection.setStartTime(new Date());
         boxSelection.setType(3);
+        boxSelection.setTask(type);
         boxSelection.setTopRow(historyConfig.getTop());
         boxSelection.setLeftColumn(historyConfig.getLeft());
         boxSelection.setBottomRow(historyConfig.getBottom());

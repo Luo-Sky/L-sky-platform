@@ -93,6 +93,7 @@ public class CdHistoryServiceImpl extends ServiceImpl<CdHistoryMapper, CdHistory
         BoxSelection boxSelection = new BoxSelection();
         boxSelection.setStartTime(new Date());
         boxSelection.setType(0);
+        boxSelection.setTask(type);
         boxSelection.setTopRow(historyConfig.getTop());
         boxSelection.setLeftColumn(historyConfig.getLeft());
         boxSelection.setBottomRow(historyConfig.getBottom());

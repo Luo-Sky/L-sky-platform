@@ -89,6 +89,7 @@ public class OdHistoryServiceImpl extends ServiceImpl<OdHistoryMapper, OdHistory
         BoxSelection boxSelection = new BoxSelection();
         boxSelection.setStartTime(new Date());
         boxSelection.setType(2);
+        boxSelection.setTask(type);
         boxSelection.setTopRow(historyConfig.getTop());
         boxSelection.setLeftColumn(historyConfig.getLeft());
         boxSelection.setBottomRow(historyConfig.getBottom());
