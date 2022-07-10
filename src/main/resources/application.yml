@@ -51,9 +51,7 @@ code:
   expiration: 600
 
 myconf:
-
   ip: http://localhost
-
   port: 9090
 
 model:
