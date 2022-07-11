@@ -71,6 +71,13 @@ public class OdHistoryServiceImpl extends ServiceImpl<OdHistoryMapper, OdHistory
             odHistory.setId(historyId);
             odHistory.setEndTime(new Date());
             odHistory.setResultImg(resultImg);
+            if(type == "object_detection_playground") {
+                odHistory.setResultImgName("操场目标检测结果图");
+            }else if(type == "object_detection_overpass"){
+                odHistory.setResultImgName("立交桥目标检测结果图");
+            }else if(type=="object_detection_aircraft"){
+                odHistory.setResultImgName("飞机目标检测结果图");
+            }
             odHistory.setResult(jsTemp.toJSONString());
             odHistory.setChoose(0);
             if (odHistoryMapper.updateById(odHistory) == 1) {
@@ -129,6 +136,13 @@ public class OdHistoryServiceImpl extends ServiceImpl<OdHistoryMapper, OdHistory
             boxSelection.setHistoryId(historyId);
             boxSelection.setEndTime(new Date());
             boxSelection.setResultImg(resultImg);
+            if(type == "object_detection_playground") {
+                boxSelection.setResultImgName("操场目标检测结果图");
+            }else if(type == "object_detection_overpass"){
+                boxSelection.setResultImgName("立交桥目标检测结果图");
+            }else if(type=="object_detection_aircraft"){
+                boxSelection.setResultImgName("飞机目标检测结果图");
+            }
             boxSelection.setResult(jsTemp.toJSONString());
 
             OdHistory odHistory = new OdHistory();

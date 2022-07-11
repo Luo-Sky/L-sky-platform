@@ -71,6 +71,12 @@ public class OcHistoryServiceImpl extends ServiceImpl<OcHistoryMapper, OcHistory
             ocHistory.setId(historyId);
             ocHistory.setEndTime(new Date());
             ocHistory.setResultImg(resultImg);
+            if(type == "segmentation_5classes"){
+                ocHistory.setResultImgName("粗分类结果图");
+            }
+            else if(type == "segmentation_15classes"){
+                ocHistory.setResultImgName("精分类结果图");
+            }
             ocHistory.setResult(jsTemp.toJSONString());
             ocHistory.setChoose(0);
             if (ocHistoryMapper.updateById(ocHistory) == 1) {
@@ -129,6 +135,12 @@ public class OcHistoryServiceImpl extends ServiceImpl<OcHistoryMapper, OcHistory
             boxSelection.setHistoryId(historyId);
             boxSelection.setEndTime(new Date());
             boxSelection.setResultImg(resultImg);
+            if(type == "segmentation_5classes"){
+                boxSelection.setResultImgName("粗分类结果图");
+            }
+            else if(type == "segmentation_15classes"){
+                boxSelection.setResultImgName("精分类结果图");
+            }
             boxSelection.setResult(jsTemp.toJSONString());
 
             OcHistory ocHistory = new OcHistory();

@@ -35,6 +35,9 @@ public class OdHistoryController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Value("${myconf.ip}")
+    private String ip;
+
     @Value("${myconf.port}")
     private String port;
 
@@ -43,9 +46,6 @@ public class OdHistoryController {
 
     @Value("${model.port}")
     private String modelPort;
-
-    @Value("${myconf.ip}")
-    private String ip;
 
     /**
      * 创建目标提取任务，保存操作
@@ -69,6 +69,7 @@ public class OdHistoryController {
         history.setStartTime(new Date());
         history.setProjectId(projectId);
         history.setSourceImg(resultUrl);
+        history.setSourceImgName(originalFilename);
         history.setTitle(title);
 
         if (odHistoryService.save(history)) {

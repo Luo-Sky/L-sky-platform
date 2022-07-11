@@ -35,6 +35,9 @@ public class CdHistoryController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Value("${myconf.ip}")
+    private String ip;
+
     @Value("${myconf.port}")
     private String port;
 
@@ -43,9 +46,6 @@ public class CdHistoryController {
 
     @Value("${model.port}")
     private String modelPort;
-
-    @Value("${myconf.ip}")
-    private String ip;
 
     /**
      * 创建目标提取任务，保存操作
@@ -82,6 +82,8 @@ public class CdHistoryController {
         history.setProjectId(projectId);
         history.setSourceImg1(resultUrl1);
         history.setSourceImg2(resultUrl2);
+        history.setSourceImg1Name(originalFilename1);
+        history.setSourceImg2Name(originalFilename2);
         history.setTitle(title);
 //        Map<String, String> urls = new HashMap<>();
 //        urls.put("img1", resultUrl1);

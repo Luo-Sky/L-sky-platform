@@ -1,5 +1,7 @@
 package com.rs.platform.controller;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -8,7 +10,12 @@ import com.rs.platform.common.Result;
 import com.rs.platform.entity.Project;
 import com.rs.platform.service.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Date;
 
 /**
  * @author : hongbo
@@ -21,9 +28,28 @@ public class ProjectController {
     @Autowired
     IProjectService projectService;
 
+    @Value("${myconf.ip}")
+    private String ip;
+
+    @Value("${myconf.port}")
+    private String port;
+
     //创建项目，保存操作
     @PostMapping
-    public Result<?> save(@RequestBody Project project) {
+    public Result<?> save(MultipartFile file, Project project) throws IOException {
+        String originalFilename = file.getOriginalFilename();  // 获取源文件的名称
+        String[] originFileStrArray = originalFilename.split("\\.");
+        String suffix = originFileStrArray[originFileStrArray.length - 1];  //获取文件名的后缀即格式
+        // 定义文件的唯一标识（前缀）
+        String flag = IdUtil.fastSimpleUUID();
+        String rootFilePath = System.getProperty("user.dir") + "/src/main/resources/cover/" + flag + "." + suffix;  // 获取上传的路径
+        FileUtil.writeBytes(file.getBytes(), rootFilePath);  // 把文件写入到上传的路径
+        String coverUrl = ip + ":" + port + "/files/project/" + flag;
+
+        project.setImg(coverUrl);
+        if(project.getCreateTime() == null){
+            project.setCreateTime(new Date());
+        }
         if (projectService.save(project)) {
             return Result.success();
         } else {

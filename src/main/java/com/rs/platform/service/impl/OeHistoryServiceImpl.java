@@ -83,6 +83,13 @@ public class OeHistoryServiceImpl extends ServiceImpl<OeHistoryMapper, OeHistory
             oeHistory.setId(historyId);
             oeHistory.setEndTime(new Date());
             oeHistory.setResultImg(resultImg);
+            if(type == "road_extraction") {
+                oeHistory.setResultImgName("道路提取结果图");
+            }else if(type == "water_extraction"){
+                oeHistory.setResultImgName("水体提取结果图");
+            }else if(type=="buildup_extraction"){
+                oeHistory.setResultImgName("建筑物提取结果图");
+            }
             oeHistory.setResult(jsTemp.toJSONString());
             oeHistory.setChoose(0);
             if (oeHistoryMapper.updateById(oeHistory) == 1) {
@@ -143,6 +150,13 @@ public class OeHistoryServiceImpl extends ServiceImpl<OeHistoryMapper, OeHistory
             boxSelection.setHistoryId(historyId);
             boxSelection.setEndTime(new Date());
             boxSelection.setResultImg(resultImg);
+            if(type == "road_extraction") {
+                boxSelection.setResultImgName("道路提取结果图");
+            }else if(type == "water_extraction"){
+                boxSelection.setResultImgName("水体提取结果图");
+            }else if(type=="buildup_extraction"){
+                boxSelection.setResultImgName("建筑物提取结果图");
+            }
             boxSelection.setResult(jsTemp.toJSONString());
 
             OeHistory oeHistory = new OeHistory();

@@ -35,6 +35,9 @@ public class OcHistoryController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Value("${myconf.ip}")
+    private String ip;
+
     @Value("${myconf.port}")
     private String port;
 
@@ -43,9 +46,6 @@ public class OcHistoryController {
 
     @Value("${model.port}")
     private String modelPort;
-
-    @Value("${myconf.ip}")
-    private String ip;
 
     /**
      * 创建目标提取任务，保存操作
@@ -69,6 +69,7 @@ public class OcHistoryController {
         history.setStartTime(new Date());
         history.setProjectId(projectId);
         history.setSourceImg(resultUrl);
+        history.setSourceImgName(originalFilename);
         history.setTitle(title);
 
         if (ocHistoryService.save(history)) {

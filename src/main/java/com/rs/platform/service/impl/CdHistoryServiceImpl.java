@@ -73,6 +73,7 @@ public class CdHistoryServiceImpl extends ServiceImpl<CdHistoryMapper, CdHistory
             cdHistory.setId(historyId);
             cdHistory.setEndTime(new Date());
             cdHistory.setResultImg(resultImg);
+            cdHistory.setResultImgName("变化检测结果图");
             cdHistory.setResult(jsTemp.toJSONString());
             cdHistory.setChoose(0);
             if (cdHistorytMapper.updateById(cdHistory) == 1) {
@@ -132,6 +133,7 @@ public class CdHistoryServiceImpl extends ServiceImpl<CdHistoryMapper, CdHistory
             boxSelection.setHistoryId(historyId);
             boxSelection.setEndTime(new Date());
             boxSelection.setResultImg(resultImg);
+            boxSelection.setResultImgName("变化检测结果图");
             boxSelection.setResult(jsTemp.toJSONString());
 
             CdHistory cdHistory = new CdHistory();
