@@ -13,7 +13,7 @@ import java.util.Date;
  * @create 2022-06-24-14:51
  **/
 
-@TableName("boxSelection")
+@TableName("boxselection")
 @Data
 public class BoxSelection {
     @TableId(value ="id", type = IdType.AUTO)
