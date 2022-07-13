@@ -32,7 +32,7 @@ public class FileController {
         OutputStream os;  // 新建一个输出流对象
         String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
-        String fileName = fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");  // 找到跟参数一致的文件
+        String fileName = fileNames.stream().filter(name -> name.contains(flag) && name.charAt(flag.length())=='.').findAny().orElse("");;  // 找到跟参数一致的文件
         try {
             if (StrUtil.isNotEmpty(fileName)) {
                 response.addHeader("Access-Control-Expose-Headers", "Content-Disposition");
