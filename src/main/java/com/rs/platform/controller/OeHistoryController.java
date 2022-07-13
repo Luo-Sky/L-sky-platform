@@ -83,7 +83,7 @@ public class OeHistoryController {
     public Result<?> processRoad(@RequestParam Long historyId, @RequestParam String flag, @RequestParam(defaultValue = "0") Integer batch, @RequestBody HistoryConfig historyConfig) throws IOException {
         String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
-        String fileName = fileNames.stream().filter(name -> name.contains(flag) && name.charAt(flag.length())=='.').findAny().orElse("");;  // 找到跟参数一致的文件
+        String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag) && name.charAt(flag.length())=='.').findAny().orElse("");;  // 找到跟参数一致的文件
 
         //请求路径
         String url = modelIp + ":" + modelPort;
@@ -111,7 +111,7 @@ public class OeHistoryController {
     public Result<?> processWater(@RequestParam Long historyId, @RequestParam String flag, @RequestParam(defaultValue = "0") Integer batch, @RequestBody HistoryConfig historyConfig) throws IOException {
         String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
-        String fileName = fileNames.stream().filter(name -> name.contains(flag) && name.charAt(flag.length())=='.').findAny().orElse("");;  // 找到跟参数一致的文件
+        String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag) && name.charAt(flag.length())=='.').findAny().orElse("");;  // 找到跟参数一致的文件
 
         //请求路径
         String url = modelIp + ":" + modelPort;
@@ -139,7 +139,7 @@ public class OeHistoryController {
     public Result<?> processBuildup(@RequestParam Long historyId, @RequestParam String flag, @RequestParam(defaultValue = "0") Integer batch, @RequestBody HistoryConfig historyConfig) throws IOException {
         String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
-        String fileName = fileNames.stream().filter(name -> name.contains(flag) && name.charAt(flag.length())=='.').findAny().orElse("");;  // 找到跟参数一致的文件
+        String fileName = basePath + fileNames.stream().filter(name -> name.contains(flag) && name.charAt(flag.length())=='.').findAny().orElse("");;  // 找到跟参数一致的文件
 
         //请求路径
         String url = modelIp + ":" + modelPort;
