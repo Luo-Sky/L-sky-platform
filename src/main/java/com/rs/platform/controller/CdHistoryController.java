@@ -99,8 +99,8 @@ public class CdHistoryController {
     public Result<?> process(@RequestParam Long historyId, @RequestParam String flag1, @RequestParam String flag2, @RequestParam(defaultValue = "0") Integer batch, @RequestBody HistoryConfig historyConfig) throws IOException {
         String basePath = System.getProperty("user.dir") + "/src/main/resources/files/";  // 定于文件上传的根路径
         List<String> fileNames = FileUtil.listFileNames(basePath);  // 获取所有的文件名称
-        String fileName1 = basePath + fileNames.stream().filter(name -> name.contains(flag1)).findAny().orElse("");  // 找到跟参数一致的文件
-        String fileName2 = basePath + fileNames.stream().filter(name -> name.contains(flag2)).findAny().orElse("");  // 找到跟参数一致的文件
+        String fileName1 = fileNames.stream().filter(name -> name.contains(flag1) && name.charAt(flag1.length())=='.').findAny().orElse("");;  // 找到跟参数一致的文件
+        String fileName2 = fileNames.stream().filter(name -> name.contains(flag2) && name.charAt(flag2.length())=='.').findAny().orElse("");;  // 找到跟参数一致的文件
 
         //请求路径
         String url = modelIp + ":" + modelPort;
