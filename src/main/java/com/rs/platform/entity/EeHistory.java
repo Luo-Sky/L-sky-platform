@@ -10,26 +10,24 @@ import java.util.Date;
 
 /**
  * @author : hongbo
- * @create 2022-06-24-14:51
+ * @create 2022-08-07-17:10
  **/
 
-@TableName("boxselection")
+@TableName("eehistory")
 @Data
-public class BoxSelection {
+public class EeHistory {
     @TableId(value ="id", type = IdType.AUTO)
     private Long id;
-    private Integer type;  //区别四个任务 0cd变化检测 1oc地物分类 2od目标检测 3oe目标提取 4ee高程估计
-    private String task;   //四个任务下的具体的任务名称
-    private Long historyId;
+    private Long projectId;
+    private String title;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
-    private Integer topRow;
-    private Integer leftColumn;
-    private Integer bottomRow;
-    private Integer rightColumn;
+    private String sourceImg;
+    private String sourceImgName;
     private String resultImg;
     private String resultImgName;
     private String result;
+    private Integer choose;   //是否存在框选 0为否，1为存在
 }
